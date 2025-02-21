@@ -21,21 +21,7 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    // const login = async (email, password) => {
-    //     console.log('Login function called');
-    //     try {
-    //         const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
-    //         console.log('Response object:', res);
-    //         localStorage.setItem("token", res.data.token);
-    //         setUser(jwtDecode(res.data.token));
-    //         navigate("/dashboard");
-    //         // return { data: res.data };
-    //         return res.data; 
-    //     } catch (error) {
-    //         console.error("Login failed");
-    //     }
-    // };
-
+   
     const login = async (email, password) => {
         console.log('Login function called');
         try {

@@ -9,23 +9,7 @@ const Login = () => {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         const response = await login(email, password);
-    //         console.log(response); // Add this log to see what's being returned
-    //         const { token, user } = response.data;
-            
-    //         localStorage.setItem("token", token);
-    //         if (user.role === "admin") {
-    //             navigate("/adminDashboard");
-    //         } else {
-    //             navigate("/dashboard");
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+   
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
