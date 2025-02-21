@@ -1,6 +1,7 @@
 const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 exports.register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -23,21 +24,21 @@ exports.register = async (req, res) => {
   }
 };
 
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   console.log("Login request received:", { email, password }); // Debugging log
 
   try {
-    const [users] = await db.execute("SELECT * FROM users WHERE email = ?", [
-      email,
-    ]);
-    console.log("Database query result:", users); // Debugging log
-    if (users.length === 0){
-        console.log("User not found"); // Debugging log
-      return res.status(400).json({ error: "User not found" });}
+    const user = await User.findOne({ where: { email } });
+    console.log("User found:", user); // Debugging log
+    if (!user) {
+      console.log("User not found"); // Debugging log
+      return res.status(400).json({ error: "User not found" });
+    }
 
-    const user = users[0];
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log("Password match:", isMatch); // Debugging log
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
     const token = jwt.sign(
@@ -46,7 +47,8 @@ exports.login = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.json({ 
+    console.log("Token generated:", token); // Debugging log
+    res.json({
       token,
       user: {
         id: user.id,
@@ -56,6 +58,7 @@ exports.login = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ error: "Login failed" });
+    console.error("Error logging in user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
