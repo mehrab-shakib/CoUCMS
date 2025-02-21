@@ -1,80 +1,108 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        role: "member",
+    });
+
+    const [error, setError] = useState("");
     const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
-            alert("Registration successful. Please login.");
-        } catch (error) {
-            alert("Registration failed");
+        setError("");
+
+        const response = await fetch("http://localhost:5000/api/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            navigate("/login"); // Redirect to login after successful registration
+        } else {
+            setError(data.error || "Registration failed");
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-            <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8">
-                <h2 className="text-3xl font-bold text-center text-green-600">Create an Account</h2>
-                <p className="text-gray-500 text-center mb-6">Join us today!</p>
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-gray-600 font-medium">Full Name</label>
+                {error && <p className="text-red-500 text-center">{error}</p>}
+
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label className="block font-medium">Name</label>
                         <input
                             type="text"
-                            placeholder="Enter your full name"
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:ring-2 focus:ring-green-400 outline-none"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
                             required
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-gray-600 font-medium">Email</label>
+                    <div className="mb-4">
+                        <label className="block font-medium">Email</label>
                         <input
                             type="email"
-                            placeholder="Enter your email"
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:ring-2 focus:ring-green-400 outline-none"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
                             required
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-gray-600 font-medium">Password</label>
+                    <div className="mb-4">
+                        <label className="block font-medium">Password</label>
                         <input
                             type="password"
-                            placeholder="Create a password"
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:ring-2 focus:ring-green-400 outline-none"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
                             required
                         />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block font-medium">Role</label>
+                        <select
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
+                        >
+                            <option value="member">Member</option>
+                            <option value="admin">Admin</option>
+                        </select>
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition"
+
+                        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+
                     >
-                        Sign Up
+                        Register
                     </button>
                 </form>
-
-                <p className="text-gray-600 text-center mt-4">
-                    Already have an account?{" "}
-                    <a href="/login" className="text-green-500 hover:underline">
-                        Login
-                    </a>
-                </p>
             </div>
         </div>
     );

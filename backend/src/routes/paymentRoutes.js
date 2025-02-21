@@ -1,11 +1,32 @@
 const express = require("express");
-const { makePayment, getUserPayments, verifyPayment } = require("../controllers/paymentController");
 const { authenticateUser, authorizeAdmin } = require("../middleware/authMiddleware");
-
+const Payment = require("../models/Payment");
 const router = express.Router();
 
-router.post("/", authenticateUser, makePayment);
-router.get("/", authenticateUser, getUserPayments);
-router.put("/verify", authenticateUser, authorizeAdmin, verifyPayment);
+// Get all pending payments
+router.get("/pending", authenticateUser, authorizeAdmin, async (req, res) => {
+    try {
+        const payments = await Payment.findAll({ where: { status: "pending" } });
+        res.json(payments);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching payments" });
+    }
+});
+
+// Approve a payment
+router.put("/approve-payment/:id", authenticateUser, authorizeAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const payment = await Payment.findByPk(id);
+        if (!payment) {
+            return res.status(404).json({ error: "Payment not found" });
+        }
+        payment.status = "completed";
+        await payment.save();
+        res.json({ message: "Payment approved successfully" });
+    } catch (error) {
+        res.status(500).json({ error: "Error approving payment" });
+    }
+});
 
 module.exports = router;

@@ -10,11 +10,15 @@ import Events from "./pages/Events";
 import Payments from "./pages/Payments";
 import PrivateRoute from "./components/PrivateRoute";
 import Recruitment from "./pages/Recruitment";
+import AdminDashboard from "./pages/AdminDashboard";
+import { AuthProvider } from "./context/AuthContext";
 
 
 function App() {
     return (
         <Router>
+        <AuthProvider>
+       
             <Navbar />
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -24,9 +28,12 @@ function App() {
                 <Route path="/clubs/:id" element={<ClubDetails />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/payments" element={<Payments />} />
-                <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                <Route path="/adminDashboard" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/recruitment" element={<Recruitment />} />
             </Routes>
+       
+        </AuthProvider>
         </Router>
     );
 }
