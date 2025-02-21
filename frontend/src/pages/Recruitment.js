@@ -1,39 +1,38 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 
 const Recruitment = () => {
-    const [clubs, setClubs] = useState([]);
-    const [clubId, setClubId] = useState("");
-    const [reason, setReason] = useState("");
-    const [message, setMessage] = useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
 
-    useEffect(() => {
-        axios.get("http://localhost:5000/api/clubs")
-            .then(response => setClubs(response.data))
-            .catch(error => console.error("Error fetching clubs:", error));
-    }, []);
-
-    const handleApply = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:5000/api/recruitment/apply", { club_id: clubId, reason })
-            .then(response => setMessage(response.data.message))
-            .catch(error => setMessage("Failed to apply"));
+        alert("Application Submitted!");
     };
 
     return (
-        <div>
-            <h2>Apply for Club Membership</h2>
-            <form onSubmit={handleApply}>
-                <select value={clubId} onChange={(e) => setClubId(e.target.value)} required>
-                    <option value="">Select a Club</option>
-                    {clubs.map(club => (
-                        <option key={club.id} value={club.id}>{club.name}</option>
-                    ))}
-                </select>
-                <textarea placeholder="Why do you want to join?" value={reason} onChange={(e) => setReason(e.target.value)} required />
-                <button type="submit">Apply</button>
-            </form>
-            {message && <p>{message}</p>}
+        <div className="min-h-screen flex flex-col justify-center items-center p-6">
+            <div className="bg-white shadow-lg rounded-lg p-8 w-96">
+                <h2 className="text-3xl font-bold text-green-600 mb-6">Join a Club</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <input
+                        type="text"
+                        placeholder="Full Name"
+                        className="w-full border rounded-lg px-4 py-2"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        className="w-full border rounded-lg px-4 py-2"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg transition">
+                        Apply Now
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

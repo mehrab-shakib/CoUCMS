@@ -1,31 +1,20 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-
 const Events = () => {
-    const [events, setEvents] = useState([]);
-
-    useEffect(() => {
-        axios.get("http://localhost:5000/api/events")
-            .then(response => setEvents(response.data))
-            .catch(error => console.error("Error fetching events:", error));
-    }, []);
+    const events = [
+        { title: "Hackathon 2024", date: "March 15, 2024" },
+        { title: "Cultural Fest", date: "April 20, 2024" },
+    ];
 
     return (
-        <div>
-            <h2>Upcoming Events</h2>
-            {events.length > 0 ? (
-                <ul>
-                    {events.map(event => (
-                        <li key={event.id}>
-                            <h3>{event.name}</h3>
-                            <p>Date: {event.date}</p>
-                            <p>Venue: {event.venue}</p>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No upcoming events.</p>
-            )}
+        <div className="min-h-screen flex flex-col items-center p-6">
+            <h2 className="text-3xl font-bold text-yellow-600 mb-6">Upcoming Events</h2>
+            <div className="w-full max-w-2xl">
+                {events.map((event, index) => (
+                    <div key={index} className="bg-white shadow-md rounded-lg p-4 mb-4">
+                        <h3 className="text-xl font-semibold text-gray-800">{event.title}</h3>
+                        <p className="text-gray-600">{event.date}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

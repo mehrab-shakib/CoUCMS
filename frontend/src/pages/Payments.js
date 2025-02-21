@@ -1,25 +1,12 @@
-import { useState } from "react";
-import axios from "axios";
-
 const Payments = () => {
-    const [amount, setAmount] = useState("");
-    const [message, setMessage] = useState("");
-
-    const handlePayment = (e) => {
-        e.preventDefault();
-        axios.post("http://localhost:5000/api/payments", { amount })
-            .then(response => setMessage("Payment successful!"))
-            .catch(error => setMessage("Payment failed."));
-    };
-
     return (
-        <div>
-            <h2>Make a Payment</h2>
-            <form onSubmit={handlePayment}>
-                <input type="number" placeholder="Enter amount" value={amount} onChange={(e) => setAmount(e.target.value)} required />
-                <button type="submit">Pay Now</button>
-            </form>
-            {message && <p>{message}</p>}
+        <div className="min-h-screen flex flex-col justify-center items-center p-6">
+            <div className="bg-white shadow-lg rounded-lg p-8 w-96">
+                <h2 className="text-3xl font-bold text-red-600 mb-6">Online Payment</h2>
+                <button className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg text-lg transition">
+                    Pay Now
+                </button>
+            </div>
         </div>
     );
 };

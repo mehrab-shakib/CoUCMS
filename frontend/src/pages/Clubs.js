@@ -1,32 +1,26 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { useState } from "react";
 
 const Clubs = () => {
-    const [clubs, setClubs] = useState([]);
-
-    useEffect(() => {
-        axios.get("http://localhost:5000/api/clubs")
-            .then(response => setClubs(response.data))
-            .catch(error => console.error("Error fetching clubs:", error));
-    }, []);
+    const clubs = [
+        { name: "Programming Club", description: "Coding, Hackathons & Development" },
+        { name: "Robotics Club", description: "AI, IoT, and Hardware Projects" },
+        { name: "Cultural Club", description: "Music, Drama & Art Events" },
+    ];
 
     return (
-        <div>
-            <h2>All Clubs</h2>
-            {clubs.length > 0 ? (
-                <ul>
-                    {clubs.map(club => (
-                        <li key={club.id}>
-                            <h3>{club.name}</h3>
-                            <p>{club.description}</p>
-                            <Link to={`/clubs/${club.id}`}>View Details</Link>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No clubs available.</p>
-            )}
+        <div className="min-h-screen flex flex-col items-center p-6">
+            <h2 className="text-3xl font-bold text-blue-600 mb-6">University Clubs</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {clubs.map((club, index) => (
+                    <div key={index} className="bg-white shadow-md rounded-lg p-6 w-80">
+                        <h3 className="text-xl font-semibold text-gray-800">{club.name}</h3>
+                        <p className="text-gray-600 mt-2">{club.description}</p>
+                        <button className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition">
+                            View Details
+                        </button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
