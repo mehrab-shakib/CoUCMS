@@ -14,11 +14,10 @@ const Club = sequelize.define("Club", {
     description: {
         type: DataTypes.TEXT,
         allowNull: true
-    },
-    status: {
-        type: DataTypes.ENUM("pending", "approved"),
-        defaultValue: "pending"
     }
+   
+}, {
+    timestamps: false
 });
 
 module.exports = Club;

@@ -1,13 +1,24 @@
 const express = require("express");
-const { createClub, getAllClubs, getClubById, updateClub, deleteClub } = require("../controllers/clubController");
-const { authenticateUser, authorizeAdmin } = require("../middleware/authMiddleware");
-
 const router = express.Router();
+const Club = require("../models/Club");
 
-router.post("/", authenticateUser, authorizeAdmin, createClub);
-router.get("/", getAllClubs);
-router.get("/:id", getClubById);
-router.put("/:id", authenticateUser, authorizeAdmin, updateClub);
-router.delete("/:id", authenticateUser, authorizeAdmin, deleteClub);
+router.post("/add", async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        const club = await Club.create({ name, description });
+        res.status(201).json({ success: true, club });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+router.get("/", async (req, res) => {
+    try {
+        const clubs = await Club.findAll();
+        res.status(200).json(clubs);
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 module.exports = router;
