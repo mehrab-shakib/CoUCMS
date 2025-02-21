@@ -10,7 +10,21 @@ const AuthContext = createContext({
   });
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                return decoded; 
+            } catch (error) {
+                console.error("Invalid token:", error);
+                localStorage.removeItem("token");
+            }
+        }
+        return null;
+    });
+
+    
     const navigate = useNavigate();
 
     useEffect(() => {
