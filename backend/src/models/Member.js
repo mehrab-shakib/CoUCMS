@@ -10,20 +10,22 @@ const Member = sequelize.define("Member", {
     primaryKey: true,
     autoIncrement: true,
   },
-  userId: {
+  user_id: {
     type: DataTypes.INTEGER,
     references: {
       model: User,
       key: "id",
     },
   },
-  clubId: {
+  club_id: {
     type: DataTypes.INTEGER,
     references: {
       model: Club,
       key: "id",
     },
-  },
+  }, 
+},{
+  timestamps: false
 });
 
 //Define association between User and Member models

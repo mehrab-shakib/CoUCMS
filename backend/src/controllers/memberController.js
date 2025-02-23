@@ -6,17 +6,21 @@ const Club = require("../models/Club");
 
 exports.joinClub = async (req, res) => {
     try {
-        const { clubId } = req.body;
-        const userId = req.user.id; // Get user ID from authenticated request
+        const club_id  = req.params.club_id;
+        const user_id = req.user.id; // Get user ID from authenticated request
 
         // Check if the user is already in the club
-        const existingMembership = await Member.findOne({ where: { userId, clubId } });
+        // const existingMembership = await Member.findOne({ where: { user_id, club_id } });
+        const existingMembership = await Member.findOne({
+          attributes: ['id', 'user_id', 'club_id'],
+          where: { user_id, club_id }
+        });
         if (existingMembership) {
             return res.status(400).json({ message: "You have already joined this club." });
         }
 
         // Add user to the club
-        await Member.create({ userId, clubId });
+        await Member.create({ user_id, club_id });
 
         res.status(200).json({ message: "Successfully joined the club!" });
     } catch (error) {

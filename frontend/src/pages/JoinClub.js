@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import AuthContext from "../context/AuthContext"; // Import authentication context
+import {useNavigate} from "react-router-dom";
 
 const JoinClub = () => {
   const [clubs, setClubs] = useState([]);
   const [selectedClub, setSelectedClub] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // Get stored token
@@ -28,13 +29,13 @@ const JoinClub = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/members/join",
-        { clubId: selectedClub },
-        { withCredentials: true }
-      );
-
+      const response = await axios.post(`http://localhost:5000/api/members/join/${selectedClub}`, { withCredentials: true }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      })
       alert(response.data.message);
+      navigate("/dashboard");
     } catch (error) {
       alert(error.response?.data?.message || "Error joining club.");
     }
