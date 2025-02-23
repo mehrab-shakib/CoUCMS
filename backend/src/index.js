@@ -12,9 +12,18 @@ const eventRoutes = require("./routes/eventRoutes");
 const recruitmentRoutes = require("./routes/recruitmentRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
+
 const app = express();
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
+app.use(cors((req, callback) => {
+    const origin = req.header('Origin');
+    if (origin && origin === 'http://localhost:3000') {
+      callback(null, { origin, credentials: true });
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }));
 app.use(bodyParser.json());
 
 app.use("/api/auth", authRoutes);

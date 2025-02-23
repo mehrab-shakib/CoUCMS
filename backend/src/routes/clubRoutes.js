@@ -12,7 +12,7 @@ router.post("/add", async (req, res) => {
     }
 });
 
-router.get("/", async (req, res) => {
+router.get("/clubs", async (req, res) => {
     try {
         const clubs = await Club.findAll();
         res.status(200).json(clubs);

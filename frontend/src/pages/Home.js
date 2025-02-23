@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import authContext from "../context/AuthContext";
+import { useContext } from "react";
 
 const Home = () => {
+    const {user} = useContext(authContext);
     return (
         <div className="min-h-screen flex flex-col justify-center items-center p-6">
             <div className="max-w-3xl bg-white shadow-lg rounded-2xl p-8 text-center">
@@ -15,9 +18,16 @@ const Home = () => {
                     <Link to="/clubs" className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg text-lg shadow-md transition">
                         View Clubs
                     </Link>
-                    <Link to="/recruitment" className="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-lg text-lg shadow-md transition">
-                        Join a Club
-                    </Link>
+                    
+                    {user ? (
+            <Link to="/joinClub" className="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-lg text-lg shadow-md transition">
+              Join a Club
+            </Link>
+          ) : (
+            <Link to="/login" className="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-lg text-lg shadow-md transition">
+              Login to Join a Club
+            </Link>
+          )}
                     <Link to="/events" className="bg-yellow-500 hover:bg-yellow-600 text-white py-3 px-6 rounded-lg text-lg shadow-md transition">
                         Upcoming Events
                     </Link>

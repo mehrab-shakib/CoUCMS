@@ -14,7 +14,7 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await login(email, password);
-            console.log("Login response:", response); // Debugging log
+            // console.log("Login response:", response); // Debugging log
             if (response) {
                 const { token, user } = response; 
                 localStorage.setItem("token", token);

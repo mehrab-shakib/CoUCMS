@@ -7,11 +7,13 @@ const AuthContext = createContext({
     user: null,
     login: () => {},
     logout: () => {},
+    authTokens: null
   });
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
         const token = localStorage.getItem("token");
+       
         if (token) {
             try {
                 const decoded = jwtDecode(token);
@@ -24,6 +26,8 @@ export const AuthProvider = ({ children }) => {
         return null;
     });
 
+    const [authTokens, setAuthTokens] = useState(localStorage.getItem("token") || null);
+
     
     const navigate = useNavigate();
 
@@ -32,6 +36,7 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             const decoded = jwtDecode(token);
             setUser(decoded);
+            setAuthTokens(token);
         }
     }, []);
 

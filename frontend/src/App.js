@@ -11,6 +11,7 @@ import Payments from "./pages/Payments";
 import PrivateRoute from "./components/PrivateRoute";
 import Recruitment from "./pages/Recruitment";
 import AdminDashboard from "./pages/AdminDashboard";
+import JoinClub from "./pages/JoinClub";
 import { AuthProvider } from "./context/AuthContext";
 
 
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/adminDashboard" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/recruitment" element={<Recruitment />} />
+                <Route path="/joinClub" element={<JoinClub />} />
             </Routes>
        
         </AuthProvider>
